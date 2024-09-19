@@ -7,6 +7,8 @@ import { FaRegEye } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
 import { RiPagesLine } from "react-icons/ri";
 import { TbArrowBounce } from "react-icons/tb";
+import { Separator } from  "@/components/ui/separator";
+import CreateFormBtn from "@/components/CreateFormBtn";
 
 export default function Home() {
   return (
@@ -15,6 +17,10 @@ export default function Home() {
         <Suspense fallback={<StatsCards loading={true}/>}>
           <CardsStatsWrapper />
         </Suspense>
+        <Separator className="my-6 " />
+        <div className="text-3xl px-2 font-bold col-span-2">Your Forms</div>
+        <Separator className="my-6 " />
+        <CreateFormBtn />
       </div>
     </>
   );
