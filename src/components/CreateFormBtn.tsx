@@ -8,50 +8,61 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "./ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { Button } from "./ui/button";
 
+import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { ImSpinner3 } from "react-icons/im";
+import { formSchema, formSchemaType } from "../../schemas/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { ImSpinner3 } from "react-icons/im";
-import { toast } from "@/hooks/use-toast";
+import { CreateForm } from "../../actions/forms";
+import { BsFileEarmarkPlus } from "react-icons/bs";
 
-const formSchema = z.object({
-  name: z.string().min(4),
-  description: z.string().optional(),
-});
-type formSchemaType = z.infer<typeof formSchema>;
 const CreateFormBtn = () => {
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: formSchemaType) {
-    // try {
-    // } catch (error) {
-    toast({
-      title: "Error",
-      description: "something went wrong",
-      variant: "destructive",
-      duration: 1000,
-    });
-    // }
+  async function onSubmit(values: formSchemaType) {
+    try {
+      const formId = await CreateForm(values);
+      console.log(formId);
+      toast({
+        title: "Success",
+        description: `Form: ${values.name}  is created`,
+        duration: 2000,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "something went wrong",
+        variant: "destructive",
+        duration: 1000,
+      });
+    }
   }
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button> Create new Form</Button>
+        <Button
+          variant={"outline"}
+          className="group border border-primary/20 h-[120px] flex flex-col justify-center items-center cursor-pointer hover:border-primary border-dashed gap-4 "
+        >
+          <BsFileEarmarkPlus className=" h-7 w-7 text-muted-foreground group-hover:text-primary" />
+          <p className="font-semibold text-xl group-hover:text-primary">
+            Create new Form
+          </p>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
