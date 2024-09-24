@@ -1,14 +1,27 @@
-import Image from "next/image";
-import { GetFormStats } from "../../../actions/forms";
-import { ReactNode, Suspense } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import CreateFormBtn from "@/components/CreateFormBtn";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Form } from "@prisma/client";
+import { formatDistance } from "date-fns";
+import Link from "next/link";
+import { ReactNode, Suspense } from "react";
+import { BiRightArrowAlt } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
+import { MdEdit } from "react-icons/md";
 import { RiPagesLine } from "react-icons/ri";
 import { TbArrowBounce } from "react-icons/tb";
-import { Separator } from "@/components/ui/separator";
-import CreateFormBtn from "@/components/CreateFormBtn";
+import { GetForms, GetFormStats } from "../../../actions/forms";
 
 export default function Home() {
   return (
@@ -22,6 +35,13 @@ export default function Home() {
         <Separator className="my-6 " />
         <div className="mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <CreateFormBtn />
+          <Suspense
+            fallback={[1, 2, 3, 4].map((el) => (
+              <FormCardSkeleton />
+            ))}
+          >
+            <FormCards />
+          </Suspense>
         </div>
       </div>
     </>
@@ -112,6 +132,68 @@ function StatsCard({
         </div>
         <p className="text-xs text-muted-foreground pt-1">{helperText}</p>
       </CardContent>
+    </Card>
+  );
+}
+
+function FormCardSkeleton() {
+  return <Skeleton className=" border-2 border-primary/20 h-[120px] w-full" />;
+}
+async function FormCards() {
+  const forms = await GetForms();
+  return (
+    <>
+      {forms.map((form) => (
+        <FormCard key={form.id} form={form} />
+      ))}
+    </>
+  );
+}
+
+function FormCard({ form }: { form: Form }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex  items-center justify-between gap-2">
+          <span className="truncate font-bold">
+            {form.name.slice(0, 1).toUpperCase() + form.name.slice(1)}
+          </span>
+          {form.published && <Badge className="bg-green-500">Published</Badge>}
+          {!form.published && <Badge className="bg-red-500">Draft</Badge>}
+        </CardTitle>
+        <CardDescription className="flex items-center justify-between text-sm">
+          {formatDistance(form.createdAt, new Date(), { addSuffix: true })}
+          {form.published && (
+            <span className="flex items-center gap-2">
+              <FaRegEye className="text-muted-foreground" />
+              <span>{form.visits.toLocaleString()}</span>
+              <RiPagesLine className="text-muted-foreground" />
+              <span>{form.submissions.toLocaleString()}</span>
+            </span>
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="h-[20px] truncate text-mb text-muted-foreground">
+        {form.description || "No Description"}
+      </CardContent>
+      <CardFooter>
+        {form.published && (
+          <Button asChild variant={"secondary"}  className=" group w-full mt-3  gap-4">
+            <Link href={`/forms/${form.id}`}>
+              View Submissions{" "}
+              <BiRightArrowAlt className=" size-5 group-hover:translate-x-7 transition-transform duration-300" />
+            </Link>
+          </Button>
+        )}
+        {!form.published && (
+          <Button asChild  variant={"secondary"} className=" group w-full mt-3  gap-4">
+            <Link href={`/forms/${form.id}`}>
+              Edit Form{" "}
+              <MdEdit className="size-5 group-hover:rotate-45 transition-transform duration-300 " />
+            </Link>
+          </Button>
+        )}
+      </CardFooter>
     </Card>
   );
 }
