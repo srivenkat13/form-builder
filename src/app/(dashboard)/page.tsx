@@ -137,7 +137,7 @@ function StatsCard({
 }
 
 function FormCardSkeleton() {
-  return <Skeleton className=" border-2 border-primary/20 h-[120px] w-full" />;
+  return <Skeleton className=" border-2 border-primary/20 h-[190px] w-full" />;
 }
 async function FormCards() {
   const forms = await GetForms();
@@ -178,7 +178,11 @@ function FormCard({ form }: { form: Form }) {
       </CardContent>
       <CardFooter>
         {form.published && (
-          <Button asChild variant={"secondary"}  className=" group w-full mt-3  gap-4">
+          <Button
+            asChild
+            variant={"secondary"}
+            className=" group w-full mt-3  gap-4"
+          >
             <Link href={`/forms/${form.id}`}>
               View Submissions{" "}
               <BiRightArrowAlt className=" size-5 group-hover:translate-x-4 transition-transform duration-300" />
@@ -186,7 +190,11 @@ function FormCard({ form }: { form: Form }) {
           </Button>
         )}
         {!form.published && (
-          <Button asChild  variant={"secondary"} className=" group w-full mt-3  gap-4">
+          <Button
+            asChild
+            variant={"secondary"}
+            className=" group w-full mt-3  gap-4"
+          >
             <Link href={`/builder/${form.id}`}>
               Edit Form{" "}
               <MdEdit className="size-5 group-hover:rotate-45 transition-transform duration-300 " />

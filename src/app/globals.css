@@ -24,7 +24,6 @@ body {
   }
 }
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -82,7 +81,6 @@ body {
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -91,4 +89,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
+.custom-gradient-error {
+  @apply bg-gradient-to-r from-red-500 to-yellow-300 text-transparent bg-clip-text hover:from-yellow-300 hover:to-red-500;
+}
