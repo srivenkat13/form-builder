@@ -1,6 +1,7 @@
 import Loading from "./loading";
 import ErrorPage from "./error";
 import { GetFormById } from "../../../../../actions/forms";
+import FormBuilder from "@/components/FormBuilder";
 
 async function BuilderPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -8,7 +9,7 @@ async function BuilderPage({ params }: { params: { id: string } }) {
   if (!form) {
     throw new Error("Form not found");
   }
-  return <div>{form.name}</div>;
+  return <FormBuilder form={form} />;
 }
 
 export default BuilderPage;
