@@ -181,14 +181,13 @@ function FormCard({ form }: { form: Form }) {
           <Button asChild variant={"secondary"}  className=" group w-full mt-3  gap-4">
             <Link href={`/forms/${form.id}`}>
               View Submissions{" "}
-              <BiRightArrowAlt className=" size-5 group-hover:translate-x-7 transition-transform duration-300" />
+              <BiRightArrowAlt className=" size-5 group-hover:translate-x-4 transition-transform duration-300" />
             </Link>
           </Button>
         )}
         {!form.published && (
           <Button asChild  variant={"secondary"} className=" group w-full mt-3  gap-4">
-            <Link href={`/forms/${form.id}`}>
-            //TODO: builder link
+            <Link href={`/builder/${form.id}`}>
               Edit Form{" "}
               <MdEdit className="size-5 group-hover:rotate-45 transition-transform duration-300 " />
             </Link>

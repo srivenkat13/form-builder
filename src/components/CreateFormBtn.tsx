@@ -27,8 +27,10 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { CreateForm } from "../../actions/forms";
 import { BsFileEarmarkPlus } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 const CreateFormBtn = () => {
+  const router = useRouter() 
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
   });
@@ -42,6 +44,7 @@ const CreateFormBtn = () => {
         description: `Form: ${values.name}  is created`,
         duration: 2000,
       });
+      router.push(`/builder/${formId}`)
     } catch (error) {
       toast({
         title: "Error",
